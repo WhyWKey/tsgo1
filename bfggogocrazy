@@ -1,0 +1,1573 @@
+-- // The Streets GUI
+
+local gPlayers = game:GetService("Players")
+local gRep = game:GetService("ReplicatedStorage")
+local Context = game:GetService("ContextActionService")
+
+local Plr = gPlayers.LocalPlayer
+local mouse = Plr:GetMouse()
+
+-- // Stuff
+
+local Open = false
+local InfMoney = false
+local RegenMode = false
+
+local BlinkAmount = 3.5
+local CanFly = true
+local CanBlink = true
+local sFlying = false
+local Blinking = false
+
+local LocalTabOpen = false
+local CmdsTabOpen = false
+local SettingsTabOpen = false
+
+if gRep:FindFirstChild("Test") then
+	local Lol = gRep.Test
+	Instance.new("Sound", gRep).Name = "Test"
+	Lol:Destroy()
+end
+
+-- // GUI
+
+-- Objects
+
+local GUI = Instance.new("ScreenGui")
+local SideButtons = Instance.new("Frame")
+local Local = Instance.new("TextButton")
+local Cmds = Instance.new("TextButton")
+local Keybinds = Instance.new("TextButton")
+local Settings = Instance.new("TextButton")
+local LocalTab = Instance.new("TextLabel")
+local LocalMain = Instance.new("Frame")
+local Regen = Instance.new("TextButton")
+local InfCash = Instance.new("TextButton")
+local CmdsTab = Instance.new("TextLabel")
+local CmdsMain = Instance.new("Frame")
+local Scroll = Instance.new("ScrollingFrame")
+local SettingsTab = Instance.new("TextLabel")
+local SettingsMain = Instance.new("Frame")
+local Apply = Instance.new("TextButton")
+local BlinkTxt = Instance.new("TextLabel")
+local BlinkNum = Instance.new("TextBox")
+local BlinkToggle = Instance.new("TextButton")
+local sFlyTxt = Instance.new("TextLabel")
+local sFlyToggle = Instance.new("TextButton")
+local Reset = Instance.new("TextButton")
+local IntroFrame = Instance.new("Frame")
+local Frame = Instance.new("Frame")
+local Txt = Instance.new("TextLabel")
+local Cred = Instance.new("TextLabel")
+local Reset_2 = Instance.new("TextButton")
+
+-- Properties
+
+GUI.Parent = game.CoreGui
+
+SideButtons.Name = "SideButtons"
+SideButtons.Parent = GUI
+SideButtons.BackgroundColor3 = Color3.new(1, 1, 1)
+SideButtons.BackgroundTransparency = 1
+SideButtons.Position = UDim2.new(-1.10000002, 0, 0.419999987, 0)
+SideButtons.Size = UDim2.new(0, 150, 0, 200)
+
+Local.Name = "Local"
+Local.Parent = SideButtons
+Local.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Local.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Local.Size = UDim2.new(0.899999976, 0, 0.129999995, 0)
+Local.Font = Enum.Font.SourceSans
+Local.FontSize = Enum.FontSize.Size14
+Local.Text = "Local"
+Local.TextColor3 = Color3.new(1, 1, 1)
+Local.TextScaled = true
+Local.TextSize = 14
+Local.TextStrokeTransparency = 0.69999998807907
+Local.TextWrapped = true
+
+Cmds.Name = "Cmds"
+Cmds.Parent = SideButtons
+Cmds.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Cmds.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Cmds.Position = UDim2.new(0, 0, 0.150000006, 0)
+Cmds.Size = UDim2.new(0.899999976, 0, 0.129999995, 0)
+Cmds.Font = Enum.Font.SourceSans
+Cmds.FontSize = Enum.FontSize.Size14
+Cmds.Text = "Commands"
+Cmds.TextColor3 = Color3.new(1, 1, 1)
+Cmds.TextScaled = true
+Cmds.TextSize = 14
+Cmds.TextStrokeTransparency = 0.69999998807907
+Cmds.TextWrapped = true
+
+Keybinds.Name = "Keybinds"
+Keybinds.Parent = SideButtons
+Keybinds.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Keybinds.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Keybinds.Position = UDim2.new(0, 0, 0.300000012, 0)
+Keybinds.Size = UDim2.new(0.899999976, 0, 0.129999995, 0)
+Keybinds.Font = Enum.Font.SourceSans
+Keybinds.FontSize = Enum.FontSize.Size14
+Keybinds.Text = "Keybinds"
+Keybinds.TextColor3 = Color3.new(1, 1, 1)
+Keybinds.TextScaled = true
+Keybinds.TextSize = 14
+Keybinds.TextStrokeTransparency = 0.69999998807907
+Keybinds.TextWrapped = true
+
+Settings.Name = "Settings"
+Settings.Parent = SideButtons
+Settings.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Settings.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Settings.Position = UDim2.new(0, 0, 0.449999988, 0)
+Settings.Size = UDim2.new(0.899999976, 0, 0.129999995, 0)
+Settings.Font = Enum.Font.SourceSans
+Settings.FontSize = Enum.FontSize.Size14
+Settings.Text = "Settings"
+Settings.TextColor3 = Color3.new(1, 1, 1)
+Settings.TextScaled = true
+Settings.TextSize = 14
+Settings.TextStrokeTransparency = 0.69999998807907
+Settings.TextWrapped = true
+
+LocalTab.Name = "LocalTab"
+LocalTab.Parent = GUI
+LocalTab.Active = true
+LocalTab.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+LocalTab.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+LocalTab.Draggable = true
+LocalTab.Position = UDim2.new(0.150000006, 0, 0.100000001, 0)
+LocalTab.Size = UDim2.new(0, 200, 0, 20)
+LocalTab.Visible = false
+LocalTab.Font = Enum.Font.SourceSans
+LocalTab.FontSize = Enum.FontSize.Size14
+LocalTab.Text = "Local"
+LocalTab.TextColor3 = Color3.new(1, 1, 1)
+LocalTab.TextScaled = true
+LocalTab.TextSize = 14
+LocalTab.TextStrokeTransparency = 0.69999998807907
+LocalTab.TextWrapped = true
+LocalTab.TextXAlignment = Enum.TextXAlignment.Left
+
+LocalMain.Name = "LocalMain"
+LocalMain.Parent = LocalTab
+LocalMain.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+LocalMain.BorderColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+LocalMain.Position = UDim2.new(0, 0, 1.10000002, 0)
+LocalMain.Size = UDim2.new(1, 0, 10, 0)
+
+Regen.Name = "Regen"
+Regen.Parent = LocalMain
+Regen.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Regen.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Regen.Position = UDim2.new(0.0500000007, 0, 0.0500000007, 0)
+Regen.Size = UDim2.new(0.899999976, 0, 0.119999997, 0)
+Regen.Font = Enum.Font.SourceSans
+Regen.FontSize = Enum.FontSize.Size24
+Regen.Text = "Regen (OFF)"
+Regen.TextColor3 = Color3.new(1, 1, 1)
+Regen.TextSize = 20
+Regen.TextStrokeTransparency = 0.69999998807907
+Regen.TextWrapped = true
+
+InfCash.Name = "InfCash"
+InfCash.Parent = LocalMain
+InfCash.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+InfCash.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+InfCash.Position = UDim2.new(0.0500000007, 0, 0.200000003, 0)
+InfCash.Size = UDim2.new(0.899999976, 0, 0.119999997, 0)
+InfCash.Font = Enum.Font.SourceSans
+InfCash.FontSize = Enum.FontSize.Size24
+InfCash.Text = "Inf Cash (OFF)"
+InfCash.TextColor3 = Color3.new(1, 1, 1)
+InfCash.TextSize = 20
+InfCash.TextStrokeTransparency = 0.69999998807907
+InfCash.TextWrapped = true
+
+CmdsTab.Name = "CmdsTab"
+CmdsTab.Parent = GUI
+CmdsTab.Active = true
+CmdsTab.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+CmdsTab.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+CmdsTab.Draggable = true
+CmdsTab.Position = UDim2.new(0.150000006, 0, 0.5, 0)
+CmdsTab.Size = UDim2.new(0, 200, 0, 20)
+CmdsTab.Visible = false
+CmdsTab.Font = Enum.Font.SourceSans
+CmdsTab.FontSize = Enum.FontSize.Size14
+CmdsTab.Text = "Commands"
+CmdsTab.TextColor3 = Color3.new(1, 1, 1)
+CmdsTab.TextScaled = true
+CmdsTab.TextSize = 14
+CmdsTab.TextStrokeTransparency = 0.69999998807907
+CmdsTab.TextWrapped = true
+CmdsTab.TextXAlignment = Enum.TextXAlignment.Left
+
+CmdsMain.Name = "CmdsMain"
+CmdsMain.Parent = CmdsTab
+CmdsMain.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+CmdsMain.BorderColor3 = Color3.new(0.32549, 0.32549, 0.32549)
+CmdsMain.Position = UDim2.new(0, 0, 1.10000002, 0)
+CmdsMain.Size = UDim2.new(1, 0, 10, 0)
+
+Scroll.Name = "Scroll"
+Scroll.Parent = CmdsMain
+Scroll.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+Scroll.BorderColor3 = Color3.new(0.32549, 0.32549, 0.32549)
+Scroll.Size = UDim2.new(1, 0, 1, 0)
+Scroll.BottomImage = "rbxassetid://3419963"
+Scroll.MidImage = "rbxassetid://3419963"
+Scroll.TopImage = "rbxassetid://3419963"
+
+SettingsTab.Name = "SettingsTab"
+SettingsTab.Parent = GUI
+SettingsTab.Active = true
+SettingsTab.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+SettingsTab.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+SettingsTab.Draggable = true
+SettingsTab.Position = UDim2.new(0.360000014, 0, 0.100000001, 0)
+SettingsTab.Size = UDim2.new(0, 200, 0, 20)
+SettingsTab.Visible = false
+SettingsTab.Font = Enum.Font.SourceSans
+SettingsTab.FontSize = Enum.FontSize.Size14
+SettingsTab.Text = "Settings"
+SettingsTab.TextColor3 = Color3.new(1, 1, 1)
+SettingsTab.TextScaled = true
+SettingsTab.TextSize = 14
+SettingsTab.TextStrokeTransparency = 0.69999998807907
+SettingsTab.TextWrapped = true
+SettingsTab.TextXAlignment = Enum.TextXAlignment.Left
+
+SettingsMain.Name = "SettingsMain"
+SettingsMain.Parent = SettingsTab
+SettingsMain.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+SettingsMain.BorderColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+SettingsMain.Position = UDim2.new(0, 0, 1.10000002, 0)
+SettingsMain.Size = UDim2.new(1, 0, 8, 0)
+
+Apply.Name = "Apply"
+Apply.Parent = SettingsMain
+Apply.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Apply.BorderColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+Apply.Position = UDim2.new(0, 0, 0.829999983, 0)
+Apply.Size = UDim2.new(0.5, 0, 0.150000006, 0)
+Apply.Font = Enum.Font.SourceSans
+Apply.FontSize = Enum.FontSize.Size24
+Apply.Text = "Apply"
+Apply.TextColor3 = Color3.new(1, 1, 1)
+Apply.TextSize = 20
+Apply.TextStrokeTransparency = 0.5
+
+BlinkTxt.Name = "BlinkTxt"
+BlinkTxt.Parent = SettingsMain
+BlinkTxt.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+BlinkTxt.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+BlinkTxt.Position = UDim2.new(0.0199999996, 0, 0.100000001, 0)
+BlinkTxt.Size = UDim2.new(0.5, 0, 0.150000006, 0)
+BlinkTxt.Font = Enum.Font.SourceSans
+BlinkTxt.FontSize = Enum.FontSize.Size28
+BlinkTxt.Text = "Blink"
+BlinkTxt.TextColor3 = Color3.new(1, 1, 1)
+BlinkTxt.TextSize = 25
+BlinkTxt.TextStrokeTransparency = 0.5
+
+BlinkNum.Name = "BlinkNum"
+BlinkNum.Parent = SettingsMain
+BlinkNum.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+BlinkNum.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+BlinkNum.Position = UDim2.new(0.779999971, 0, 0.100000001, 0)
+BlinkNum.Size = UDim2.new(0.200000003, 0, 0.150000006, 0)
+BlinkNum.Font = Enum.Font.SourceSans
+BlinkNum.FontSize = Enum.FontSize.Size14
+BlinkNum.Text = "3.5"
+BlinkNum.TextColor3 = Color3.new(1, 1, 1)
+BlinkNum.TextScaled = true
+BlinkNum.TextSize = 14
+BlinkNum.TextStrokeTransparency = 0.5
+BlinkNum.TextWrapped = true
+
+BlinkToggle.Name = "BlinkToggle"
+BlinkToggle.Parent = SettingsMain
+BlinkToggle.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+BlinkToggle.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+BlinkToggle.Position = UDim2.new(0.550000012, 0, 0.100000001, 0)
+BlinkToggle.Size = UDim2.new(0.200000003, 0, 0.150000006, 0)
+BlinkToggle.Font = Enum.Font.SourceSans
+BlinkToggle.FontSize = Enum.FontSize.Size14
+BlinkToggle.Text = "ON"
+BlinkToggle.TextColor3 = Color3.new(1, 1, 1)
+BlinkToggle.TextScaled = true
+BlinkToggle.TextSize = 14
+BlinkToggle.TextStrokeTransparency = 0.5
+BlinkToggle.TextWrapped = true
+
+sFlyTxt.Name = "sFlyTxt"
+sFlyTxt.Parent = SettingsMain
+sFlyTxt.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+sFlyTxt.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+sFlyTxt.Position = UDim2.new(0.0199999996, 0, 0.300000012, 0)
+sFlyTxt.Size = UDim2.new(0.5, 0, 0.150000006, 0)
+sFlyTxt.Font = Enum.Font.SourceSans
+sFlyTxt.FontSize = Enum.FontSize.Size28
+sFlyTxt.Text = "sFly"
+sFlyTxt.TextColor3 = Color3.new(1, 1, 1)
+sFlyTxt.TextSize = 25
+sFlyTxt.TextStrokeTransparency = 0.5
+
+sFlyToggle.Name = "sFlyToggle"
+sFlyToggle.Parent = SettingsMain
+sFlyToggle.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+sFlyToggle.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+sFlyToggle.Position = UDim2.new(0.550000012, 0, 0.300000012, 0)
+sFlyToggle.Size = UDim2.new(0.425000012, 0, 0.150000006, 0)
+sFlyToggle.Font = Enum.Font.SourceSans
+sFlyToggle.FontSize = Enum.FontSize.Size14
+sFlyToggle.Text = "ON"
+sFlyToggle.TextColor3 = Color3.new(1, 1, 1)
+sFlyToggle.TextScaled = true
+sFlyToggle.TextSize = 14
+sFlyToggle.TextStrokeTransparency = 0.5
+sFlyToggle.TextWrapped = true
+
+Reset.Name = "Reset"
+Reset.Parent = SettingsMain
+Reset.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Reset.BorderColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+Reset.Position = UDim2.new(0.5, 0, 0.829999983, 0)
+Reset.Size = UDim2.new(0.5, 0, 0.150000006, 0)
+Reset.Font = Enum.Font.SourceSans
+Reset.FontSize = Enum.FontSize.Size24
+Reset.Text = "Reset"
+Reset.TextColor3 = Color3.new(1, 1, 1)
+Reset.TextSize = 20
+Reset.TextStrokeTransparency = 0.5
+
+IntroFrame.Name = "IntroFrame"
+IntroFrame.Parent = GUI
+IntroFrame.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+IntroFrame.BorderColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+IntroFrame.Size = UDim2.new(1, 0, 1, 0)
+IntroFrame.Visible = false
+
+Frame.Parent = IntroFrame
+Frame.BackgroundColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+Frame.BorderColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Frame.BorderSizePixel = 5
+Frame.ClipsDescendants = true
+Frame.Position = UDim2.new(0.25, 0, 0.349999994, 0)
+Frame.Size = UDim2.new(0.5, 0, 0.200000003, 0)
+
+Txt.Name = "Txt"
+Txt.Parent = Frame
+Txt.BackgroundColor3 = Color3.new(1, 1, 1)
+Txt.BackgroundTransparency = 1
+Txt.Size = UDim2.new(1, 0, 1, 0)
+Txt.Font = Enum.Font.SourceSansBold
+Txt.FontSize = Enum.FontSize.Size60
+Txt.Text = "The Streets"
+Txt.TextColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Txt.TextSize = 57
+Txt.TextStrokeTransparency = 0.5
+Txt.TextWrapped = true
+
+Cred.Name = "Cred"
+Cred.Parent = IntroFrame
+Cred.BackgroundColor3 = Color3.new(1, 1, 1)
+Cred.BackgroundTransparency = 1
+Cred.Position = UDim2.new(0.25, 0, 0.600000024, 0)
+Cred.Size = UDim2.new(0.5, 0, 0.100000001, 0)
+Cred.Font = Enum.Font.SourceSansItalic
+Cred.FontSize = Enum.FontSize.Size48
+Cred.Text = "By Chilled"
+Cred.TextColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Cred.TextSize = 42
+Cred.TextStrokeTransparency = 0.5
+
+Reset_2.Name = "Reset"
+Reset_2.Parent = Cred
+Reset_2.BackgroundColor3 = Color3.new(0.101961, 0.611765, 0.666667)
+Reset_2.BorderColor3 = Color3.new(0.258824, 0.258824, 0.258824)
+Reset_2.Position = UDim2.new(0.5, 0, 0.829999983, 0)
+Reset_2.Size = UDim2.new(0.5, 0, 0.150000006, 0)
+Reset_2.Font = Enum.Font.SourceSans
+Reset_2.FontSize = Enum.FontSize.Size24
+Reset_2.Text = "Reset"
+Reset_2.TextColor3 = Color3.new(1, 1, 1)
+Reset_2.TextSize = 20
+Reset_2.TextStrokeTransparency = 0.5
+
+local SideButtons = GUI:WaitForChild("SideButtons")
+	local Local = SideButtons.Local
+	local Cmds = SideButtons.Cmds
+	local Keybinds = SideButtons.Keybinds
+	local Settings = SideButtons.Settings
+	
+local LocalTab = GUI:WaitForChild("LocalTab")
+	local LocalMain = LocalTab:WaitForChild("LocalMain")
+		local Regen = LocalMain.Regen
+		local InfCash = LocalMain.InfCash
+		
+local CmdsTab = GUI:WaitForChild("CmdsTab")
+	local CmdsMain = CmdsTab.CmdsMain
+		local Scroll = CmdsMain.Scroll
+	
+local SettingsTab = GUI:WaitForChild("SettingsTab")
+	local SettingsMain = SettingsTab:WaitForChild("SettingsMain")
+		local Apply = SettingsMain.Apply
+		local Reset = SettingsMain.Reset
+		local BlinkNum = SettingsMain.BlinkNum
+		local BlinkToggle = SettingsMain.BlinkToggle
+		local sFlyToggle = SettingsMain.sFlyToggle 
+	
+-- // Gui functions
+
+local ToggleGUI = function(Name, State, Obj)
+	if State == Enum.UserInputState.End then
+		if not Open then
+			Open = true
+			SideButtons:TweenPosition(UDim2.new(0.01, 0, 0.42, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, 0.15, true)
+			wait()
+			GUI.Enabled = true
+		else
+			Open = false
+			SideButtons:TweenPosition(UDim2.new(-1.1, 0, 0.42, 0), Enum.EasingDirection.In, Enum.EasingStyle.Quart, 0.15, true)
+			wait()
+			GUI.Enabled = false
+		end
+	end
+end
+
+local Blink = function(Name, State, Obj)
+	if State == Enum.UserInputState.End then
+		if not Blinking then
+			Blinking = true
+			while Blinking do
+				Plr.Character.HumanoidRootPart.CFrame = Plr.Character.HumanoidRootPart.CFrame + (Plr.Character.HumanoidRootPart.CFrame.lookVector * BlinkAmount)
+				wait()
+			end
+		else
+			Blinking = false
+		end
+	end
+end
+
+local sFly = function(Name, State, Obj)
+	if State == Enum.UserInputState.End then
+		if not sFlying then
+			sFlying = true
+			while sFlying do
+				Plr.Character.Humanoid.Sit = true
+				Plr.Character.Humanoid.Jump = true
+				wait()
+			end
+		else
+			sFlying = false
+			Plr.Character.Humanoid.Jump = true
+		end
+	end
+end
+
+local Food = function(Name, State, Obj)
+	if State == Enum.UserInputState.End then
+		if workspace:FindFirstChild("Burger | $15") then
+			workspace["Burger | $15"]:MoveTo(gPlayers.LocalPlayer.Character.Torso.Position)
+		end	
+	end
+end
+
+local Click = function()
+	if not GUI:FindFirstChild("Click") then
+		local Click = Instance.new("Sound", GUI)
+		Click.Name = "Click"
+		Click.SoundId = "rbxassetid://537744814"
+		Click:Play()
+	else
+		GUI.Click:Play()
+	end
+end
+
+local Notify = function(Title, Txt, Icon, Time)
+	game:GetService("StarterGui"):SetCore("SendNotification", {
+		Title = Title,
+		Text = Txt,
+		Icon = Icon,
+		Duration = Time -- Defaults to 5 secs
+	})
+end
+
+Local.MouseButton1Down:connect(function()
+	if not LocalTabOpen then
+		LocalTabOpen = true
+		Click()
+		LocalTab.Visible = true	
+	else
+		LocalTabOpen = false
+		Click()
+		LocalTab.Visible = false		
+	end
+end)
+
+Cmds.MouseButton1Down:connect(function()
+	if not CmdsTabOpen then
+		CmdsTabOpen = true
+		Click()
+		CmdsTab.Visible = true
+	else
+		CmdsTabOpen = false
+		Click()
+		CmdsTab.Visible = false
+	end
+end)
+
+Settings.MouseButton1Down:connect(function()
+	if not SettingsTabOpen then
+		SettingsTabOpen = true
+		Click()
+		SettingsTab.Visible = true
+	else
+		SettingsTabOpen = false
+		Click()
+		SettingsTab.Visible = false
+	end
+end)
+
+-- // Main functions
+
+workspace.ChildAdded:connect(function(Child)
+	if InfMoney and Child.Name == "RandomSpawner" then
+		for i,v in pairs(Child.Model:GetChildren()) do
+			if v:IsA("MeshPart") then
+				Child.CanCollide = false
+				Child.CFrame = Plr.Character.Torso.CFrame	
+			end
+		end
+	end
+end)
+
+InfCash.MouseButton1Down:connect(function()
+	if not InfMoney then
+		InfMoney = true
+		Click()
+		InfCash.Text = "Infinite Cash (ON)"
+	else
+		InfMoney = false
+		Click()
+		InfCash.Text = "Infinite Cash (OFF)"
+	end
+end)
+
+Regen.MouseButton1Down:connect(function()
+	if not RegenMode then
+		RegenMode = true
+		Click()
+		Regen.Text = "Regen (ON)"
+	else
+		RegenMode = false
+		Click()
+		Regen.Text = "Regen (OFF)"
+	end
+end)
+
+Apply.MouseButton1Down:connect(function()
+	Click()
+	if not BlinkNum.Text:match("%d+") then -- Checks if it's a #
+		BlinkAmount = 0
+	else
+		BlinkAmount = BlinkNum.Text
+	end
+	print("Settings have been applied.")
+end)
+
+BlinkToggle.MouseButton1Down:Connect(function()
+	if not CanBlink then
+		CanBlink = true
+		Click()
+		Context:BindAction("Blink", Blink, true, Enum.KeyCode.Q)
+		BlinkToggle.Text = "ON"
+	else
+		CanBlink = false
+		Click()
+		Context:UnbindAction("Blink")
+		Blinking = false
+		BlinkToggle.Text = "OFF"
+	end
+end)
+
+sFlyToggle.MouseButton1Down:Connect(function()
+	if not CanFly then
+		CanFly = true
+		Click()
+		Context:BindAction("sFly", sFly, true, Enum.KeyCode.R)
+		sFlyToggle.Text = "ON"
+	else
+		CanFly = false
+		Click()
+		Context:UnbindAction("sFly")
+		sFlying = false
+		Plr.Character.Humanoid.Jump = true
+		sFlyToggle.Text = "OFF"
+	end
+end)
+
+-- // Plr Stuff
+
+local TeleportTo = function(Cord)
+	for i,v in pairs(Plr.PlayerGui:GetChildren()) do
+		if v:IsA("LocalScript") then
+			v.Disabled = true
+		end
+	end
+	Plr.Character.HumanoidRootPart.CFrame = Cord
+	for i,v in pairs(Plr.PlayerGui:GetChildren()) do
+		if v:IsA("LocalScript") then
+			v.Disabled = false
+		end
+	end
+end
+
+local OP = function()
+	Plr.Backpack.ChildAdded:connect(function(Child)
+   		if Child:IsA("Tool") or Child:IsA("HopperBin") then
+       		if Child:FindFirstChild("Cooldown", true) then
+            	Child.Info.Cooldown.Value = 0.01
+       		end
+        	if Child:FindFirstChild("AnimSpeed", true) then
+            	Child.Info.AnimSpeed.Value = 5
+        	end
+    	end
+	end)
+	for i,Child in pairs(Plr.Backpack:GetChildren()) do
+		if Child:IsA("Tool") or Child:IsA("HopperBin") then
+       		if Child:FindFirstChild("Cooldown", true) then
+            	Child.Info.Cooldown.Value = 0.01
+       		end
+        	if Child:FindFirstChild("AnimSpeed", true) then
+            	Child.Info.AnimSpeed.Value = 5
+        	end
+    	end		
+	end
+	Plr.Character.Humanoid.Changed:connect(function()
+		if Plr.Character.Humanoid.WalkSpeed <= 0 then
+			Plr.Character.Humanoid.WalkSpeed = 16
+		end
+	end)
+	Plr.Backpack:WaitForChild("ServerTraits").Stam.Value = 100
+	Plr.Backpack.ServerTraits.Stam.Changed:connect(function()
+		Plr.Backpack.ServerTraits.Stam.Value = 100
+	end)
+end
+
+-- // Admin Stuff
+
+local Prefix = ";"
+local ScriptPrefix = "/"
+local Split = " " 
+
+local Commands = {}
+local Admins = {}
+local Bans = {}
+local Speaker = nil
+
+local AddCmd = function(Name, Desc, Alias, Func)
+	table.insert(Commands, {
+		Name = Name,
+		DESC = Desc,
+		ALIAS = Alias,
+		FUNC = Func
+	})
+end
+
+local Endat = function(Str, Val)
+	local Z = Str:find(Val)
+	if Z then
+		return Str:sub(0, Z - Str.len(Val)), true
+	else
+		return Str, false
+	end
+end
+
+local GetArgs = function(Str)
+	local Args = {}
+	local NewArg = nil
+	local Has_Split = nil
+	local S = Str
+	repeat
+		NewArg, Has_Split = Endat(S:lower(), Split)
+		if NewArg ~= "" then
+			Args[#Args + 1] = NewArg
+			S = S:sub(string.len(NewArg) + string.len(Split) + 1)
+		end
+	until Has_Split == false
+	return Args
+end
+
+local GetTable = function(Tab, N)
+	for i = 1, #Tab do
+		if Tab[i] == N then
+			return i
+		else
+			return false
+		end
+	end
+end
+
+local Check = function(Table, N, B)
+	if N == Plr.Name then
+		return B
+	elseif Table[N] == true then
+		return true
+	else
+		return false
+	end
+end
+
+local InTable = function(Tab, Obj)
+	for i,v in pairs(Tab) do
+		if Obj == v then
+			return true
+		end
+	end
+end
+
+local FindCmd = function(Str)
+	for i,v in pairs(Commands) do
+		if string.lower(v.Name) == string.lower(Str) or GetTable(v.ALIAS, string.lower(Str)) then
+			return v
+		end
+	end
+end
+
+local GetPrefix = function(Str)
+	if Str:sub(1, string.len(Prefix)) == Prefix then
+		return {"Cmd", string.len(Prefix) + 1}
+	elseif Str:sub(1, string.len(ScriptPrefix)) == ScriptPrefix then
+		return {"Script", string.len(Prefix) + 1}
+	end
+end
+
+local DoScript = function(Str)
+	spawn(function()
+		local Script, Error = loadstring(Str)
+		if not Script then
+			error(Error)
+		else
+			Script()
+		end
+	end)
+end
+
+local DoCmd = function(Str, P)
+	local SplitCmd = GetArgs(Str)
+	local Cmd = FindCmd(SplitCmd[1])
+	local A = Str:sub(string.len(SplitCmd[1]) + string.len(Split) + 1)
+	local Args = GetArgs(A)
+	pcall(function()
+		Cmd.FUNC(Args, P)
+	end)
+end
+
+local HandleMsg = function(Str, P)
+	if InTable(Admins, P.Name) or P.UserId == Plr.UserId then
+		Speaker = P.Name
+	else
+		return
+	end
+	Str = Str:gsub("/e ", "")
+	local Fix = GetPrefix(Str)
+	if Fix == nil then return end
+	Str = Str:sub(Fix[2])
+	if Fix[1] == "Cmd" then
+		DoCmd(Str, P)
+	elseif Fix[1] == "Script" then
+		DoScript(Str)
+	end
+end
+
+local Split = function(Self, Sep)
+   local Sep, Fields = Sep or Split, {}
+   local Pattern = string.format("([^%s]+)", Sep)
+   Self:gsub(Pattern, function(c) Fields[#Fields+1] = c end)
+   return Fields
+end
+
+function GetPlr(N)
+	local NameTable = {}
+	N = N:lower()
+	local Diff = Split(N, ",")
+	for i,z in pairs(Diff) do
+		if z == "me" then
+			table.insert(NameTable, Speaker)
+		elseif z == "all" then
+			for i,v in pairs(gPlayers:GetPlayers()) do
+				table.insert(NameTable, v.Name)
+			end
+		elseif z == "others" then
+			for i,v in pairs(gPlayers:GetPlayers()) do
+				if v.Name ~= gPlayers[Speaker].Name then
+					table.insert(NameTable, v.Name)
+				end
+			end
+		elseif z == "friends" then
+			for i,v in pairs(gPlayers:GetPlayers()) do
+				if v:IsFriendsWith(Plr.UserId) then
+					table.insert(NameTable, v.Name)
+				end
+			end
+		elseif z == "nonfriends" then
+			for i,v in pairs(gPlayers:GetPlayers()) do
+				if not v:IsFriendsWith(Plr.UserId) then
+					table.insert(NameTable, v.Name)
+				end
+			end
+		else
+			for i,x in pairs(gPlayers:GetPlayers()) do
+				if string.sub(x.Name:lower(), 1, #z) == z then
+					table.insert(NameTable, x.Name)
+				end
+			end
+		end
+	end
+	return NameTable
+end
+
+local Hookchat = function(Plr)
+	Plr.Chatted:connect(function(Msg)
+		HandleMsg(Msg, Plr)
+	end)
+end
+
+for i,v in pairs(gPlayers:GetPlayers()) do
+	Hookchat(v)
+end
+
+gPlayers.PlayerAdded:connect(function(P)
+	Hookchat(P)
+end)
+
+-- // Admin Commands
+
+AddCmd("goto", "tp to plr", {},
+function(Args)
+	local P = GetPlr(Args[1])
+	for i,v in pairs(P) do
+		TeleportTo(gPlayers[v].Character.Torso.CFrame)
+	end
+end)
+
+AddCmd("bank", "tp to bank", {},
+function(Args)
+	print'1'
+	TeleportTo(CFrame.new(-269.053375, 4.81635475, 139.362961))
+end)
+
+AddCmd("prison", "tp to prison", {},
+function(Args)
+	print'1'
+	TeleportTo(CFrame.new(-973.523621, 3.19878054, -76.6112595))
+end)
+
+AddCmd("bt", "test", {},
+function(Args)
+	local x = Instance.new("HopperBin", Plr.Backpack)
+	x.Name = "Delete"
+	x.BinType = "Hammer"
+end)
+
+AddCmd("cl", "removes bt", {},
+function(Args)
+	for i,v in pairs(Plr.Backpack:GetChildren()) do
+		if v.Name == "Delete" then
+			v:Destroy()
+		end
+	end
+end)
+
+AddCmd("unlock", "unlock all", {},
+function(Args)
+	function unlock(instance) 
+		for i,v in pairs(instance:GetChildren()) do
+			if v:IsA("BasePart") then
+				v.Locked = false
+			end
+			unlock(v)
+		end
+	end
+	unlock(workspace)	
+end)
+
+AddCmd("find", "find plr", {},
+function(Args)
+	local P = GetPlr(Args[1])
+	for i,v in pairs(P) do
+		local bgui = Instance.new("BillboardGui", gPlayers[v].Character.Head)
+		bgui.AlwaysOnTop = true
+		bgui.Adornee = gPlayers[v].Character.Head
+		bgui.Enabled = true
+		bgui.MaxDistance = math.huge
+		bgui.Size = UDim2.new(0, 200, 0, 50)
+		local txt = Instance.new("TextLabel", bgui)
+		txt.Text = gPlayers[v].Name
+		txt.BackgroundTransparency = 1
+		txt.Position = UDim2.new(0, 0, -0.9, 0)
+		txt.Size = UDim2.new(1, 0, 0, 46)
+		txt.Font = Enum.Font.SourceSansBold
+		txt.TextColor3 = Color3.fromRGB(255, 255, 255)
+		txt.TextScaled = true
+		txt.TextStrokeTransparency = 0.5
+	end
+end)
+
+AddCmd("z", "tp to secret spot", {},
+function(Args)
+	TeleportTo(CFrame.new(-985.419128, 58.1662216, -38.8358192))
+end)
+
+AddCmd("food", "brings food", {"f"},
+function(Args)
+	if workspace:FindFirstChild("Burger | $15") then
+		workspace["Burger | $15"]:MoveTo(gPlayers.LocalPlayer.Character.Torso.Position)
+	end
+end)
+
+AddCmd("ammo", "bring ammo", {},
+function(Args)
+	if workspace:FindFirstChild("Buy Ammo | $25") then
+		workspace["Buy Ammo | $25"]:MoveTo(gPlayers.LocalPlayer.Character.Torso.Position)
+	end
+end)
+
+local Flying = false
+
+AddCmd("fly", "F to toggle", {},
+function(Args)
+	if Speaker == Plr.Name then
+		localplayer = Plr
+		
+		if workspace:FindFirstChild("Core") then
+			workspace.Core:Destroy()
+		end
+		
+		local Core = Instance.new("Part")
+		Core.Name = "Core"
+		Core.Size = Vector3.new(0.05, 0.05, 0.05)
+
+		spawn(function()
+			Core.Parent = workspace
+			local Weld = Instance.new("Weld", Core)
+			Weld.Part0 = Core
+			Weld.Part1 = localplayer.Character.Torso
+			Weld.C0 = CFrame.new(0, 0, 0)
+		end)
+		
+		workspace:WaitForChild("Core")
+		
+		local torso = workspace.Core
+		flying = true
+		local speed=0
+		local keys={a=false,d=false,w=false,s=false} 
+		local e1
+		local e2
+		local function start()
+			local pos = Instance.new("BodyPosition",torso)
+			local gyro = Instance.new("BodyGyro",torso)
+			pos.Name="EPIXPOS"
+			pos.maxForce = Vector3.new(math.huge, math.huge, math.huge)
+			pos.position = torso.Position
+			gyro.maxTorque = Vector3.new(9e9, 9e9, 9e9) 
+			gyro.cframe = torso.CFrame
+			repeat
+				wait()
+				localplayer.Character.Humanoid.PlatformStand=true
+				local new=gyro.cframe - gyro.cframe.p + pos.position
+				if not keys.w and not keys.s and not keys.a and not keys.d then
+					speed=1
+				end
+				if keys.w then 
+					new = new + workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+					speed=speed+0.01
+				end
+				if keys.s then 
+					new = new - workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+					speed=speed+0.01
+				end
+				if keys.d then 
+					new = new * CFrame.new(speed,0,0)
+					speed=speed+0.01
+				end
+				if keys.a then 
+					new = new * CFrame.new(-speed,0,0)
+					speed=speed+0.01
+				end
+				if speed>5 then
+					speed=5
+				end
+				pos.position=new.p
+				if keys.w then
+					gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(-math.rad(speed*15),0,0)
+				elseif keys.s then
+					gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(math.rad(speed*15),0,0)
+				else
+					gyro.cframe = workspace.CurrentCamera.CoordinateFrame
+				end
+			until flying == false
+			if gyro then gyro:Destroy() end
+			if pos then pos:Destroy() end
+			flying=false
+			localplayer.Character.Humanoid.PlatformStand=false
+			speed=0
+		end
+		e1=mouse.KeyDown:connect(function(key)
+			if not torso or not torso.Parent then flying=false e1:disconnect() e2:disconnect() return end
+			if key=="w" then
+				keys.w=true
+			elseif key=="s" then
+				keys.s=true
+			elseif key=="a" then
+				keys.a=true
+			elseif key=="d" then
+				keys.d=true
+			elseif key=="f" then
+				if flying==true then
+					flying=false
+				else
+					flying=true
+					start()
+				end
+			end
+		end)
+		e2=mouse.KeyUp:connect(function(key)
+			if key=="w" then
+				keys.w=false
+			elseif key=="s" then
+				keys.s=false
+			elseif key=="a" then
+				keys.a=false
+			elseif key=="d" then
+				keys.d=false
+			end
+		end)
+		start()
+	end
+end)
+
+AddCmd("unfly", "unfly", {},
+function(Args)
+	if Speaker == Plr.Name then
+		if workspace:FindFirstChild("Core") then
+			workspace.Core:Destroy()
+		end
+		flying = false
+	end
+end)
+
+local Pos = 0
+local Pos2 = 0
+
+for i,v in pairs(Commands) do
+	local t = Instance.new("TextLabel", Scroll)
+	t.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+	t.BorderColor3 = Color3.fromRGB(45, 45, 45)
+	t.Position = UDim2.new(0, 0, Pos, 0)
+	t.Size = UDim2.new(1, 0, 0.05, 0)
+	t.Font = Enum.Font.SourceSansLight
+	t.Text = "[" .. i .. "] " .. v.Name
+	t.TextColor3 = Color3.fromRGB(255, 255, 255)
+	t.TextScaled = true
+	t.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+	t.TextStrokeTransparency = 1
+	t.TextXAlignment = Enum.TextXAlignment.Left
+	Scroll.CanvasSize = Scroll.CanvasSize + UDim2.new(0, 0, Pos2, 0)
+	Pos = Pos + 0.06
+	Pos2 = Pos2 + 0.001
+	wait()
+end
+
+-- // Keystuff
+
+Context:BindAction("Toggle", ToggleGUI, true, Enum.KeyCode.Equals)
+Context:BindAction("Blink", Blink, true, Enum.KeyCode.Q)
+Context:BindAction("sFly", sFly, true, Enum.KeyCode.R)
+Context:BindAction("Food", Food, true, Enum.KeyCode.O)
+
+OP()
+
+Plr.CharacterAdded:connect(function()
+	wait(0.5)
+	OP()
+end)
+
+-- // End
+wait()
+Notify("The Streets GUI", "Press '+' key to toggle GUI.", nil, 10)
+
+print("LEAKED BY MR STEAL YO BORK @ BORK GANG")
+local Gui2 = Instance.new('ScreenGui', game.CoreGui)
+Gui2.Name = "REKT BY BORK GANG LOLOLOL"
+local version = "big borks"
+local function createframe(bkgc3,bkgtrans,borderc3, bordersize, name, parent, pos, rot, size, visible, zindex)
+	local newframe = Instance.new("Frame")
+	newframe.BackgroundColor3 = bkgc3
+	newframe.BackgroundTransparency = bkgtrans
+	newframe.BorderColor3 = borderc3
+	newframe.BorderSizePixel = bordersize
+	newframe.Name = name
+	newframe.Parent = parent
+	newframe.Position = pos
+	newframe.Rotation = rot
+	newframe.Size = size
+	newframe.Visible = visible
+	newframe.ZIndex = zindex
+	return newframe
+end
+
+local function createlabel(bkgc3,bkgtrans,borderc3, bordersize, name, parent, pos, rot, size, visible, zindex, font, fontsize, text, textc3, textscaled, textstrokec3, textstroketrans, texttrans, textwrapped, xalign, yalign)
+	local newlabel = Instance.new("TextLabel")
+	newlabel.BackgroundColor3 = bkgc3
+	newlabel.BackgroundTransparency = bkgtrans
+	newlabel.BorderColor3 = borderc3
+	newlabel.BorderSizePixel = bordersize
+	newlabel.Name = name
+	newlabel.Parent = parent
+	newlabel.Position = pos
+	newlabel.Rotation = rot
+	newlabel.Size = size
+	newlabel.Visible = visible
+	newlabel.ZIndex = zindex
+	newlabel.Font = font
+	newlabel.FontSize = fontsize
+	newlabel.Text = text
+	newlabel.TextColor3 = textc3
+	newlabel.TextScaled = textscaled
+	newlabel.TextStrokeColor3 = textstrokec3
+	newlabel.TextStrokeTransparency = textstroketrans
+	newlabel.TextTransparency = texttrans
+	newlabel.TextWrapped = textwrapped
+	newlabel.TextXAlignment = xalign
+	newlabel.TextYAlignment = yalign
+	return newlabel
+end
+
+local function createbutton(autocolor, bkgc3,bkgtrans,borderc3, bordersize, name, parent, pos, rot, size, visible, zindex, font, fontsize, text, textc3, textscaled, textstrokec3, textstroketrans, texttrans, textwrapped, xalign, yalign)
+	local newbutton = Instance.new("TextButton")
+	newbutton.AutoButtonColor = autocolor
+	newbutton.BackgroundColor3 = bkgc3
+	newbutton.BackgroundTransparency = bkgtrans
+	newbutton.BorderColor3 = borderc3
+	newbutton.BorderSizePixel = bordersize
+	newbutton.Name = name
+	newbutton.Parent = parent
+	newbutton.Position = pos
+	newbutton.Rotation = rot
+	newbutton.Size = size
+	newbutton.Visible = visible
+	newbutton.ZIndex = zindex
+	newbutton.Font = font
+	newbutton.FontSize = fontsize
+	newbutton.Text = text
+	newbutton.TextColor3 = textc3
+	newbutton.TextScaled = textscaled
+	newbutton.TextStrokeColor3 = textstrokec3
+	newbutton.TextStrokeTransparency = textstroketrans
+	newbutton.TextTransparency = texttrans
+	newbutton.TextWrapped = textwrapped
+	newbutton.TextXAlignment = xalign
+	newbutton.TextYAlignment = yalign
+	return newbutton
+end
+
+local function createtextbox(bkgc3,bkgtrans,borderc3, bordersize, clrtext, multiline, name, parent, pos, rot, size, visible, zindex, font, fontsize, text, textc3, textscaled, textstrokec3, textstroketrans, texttrans, textwrapped, xalign, yalign)
+	local newbox = Instance.new("TextBox")
+	newbox.BackgroundColor3 = bkgc3
+	newbox.BackgroundTransparency = bkgtrans
+	newbox.BorderColor3 = borderc3
+	newbox.BorderSizePixel = bordersize
+	newbox.ClearTextOnFocus = clrtext
+	newbox.MultiLine = multiline
+	newbox.Name = name
+	newbox.Parent = parent
+	newbox.Position = pos
+	newbox.Rotation = rot
+	newbox.Size = size
+	newbox.Visible = visible
+	newbox.ZIndex = zindex
+	newbox.Font = font
+	newbox.FontSize = fontsize
+	newbox.Text = text
+	newbox.TextColor3 = textc3
+	newbox.TextScaled = textscaled
+	newbox.TextStrokeColor3 = textstrokec3
+	newbox.TextStrokeTransparency = textstroketrans
+	newbox.TextTransparency = texttrans
+	newbox.TextWrapped = textwrapped
+	newbox.TextXAlignment = xalign
+	newbox.TextYAlignment = yalign
+	return newbox
+end
+
+local function createimagelabel(bkgc3,bkgtrans,borderc3, bordersize, name, parent, pos, rot, size, visible, zindex, image, imagetrans)
+	local newimage = Instance.new("ImageLabel")
+	newimage.BackgroundColor3 = bkgc3
+	newimage.BackgroundTransparency = bkgtrans
+	newimage.BorderColor3 = borderc3
+	newimage.BorderSizePixel = bordersize
+	newimage.Name = name
+	newimage.Parent = parent
+	newimage.Position = pos
+	newimage.Rotation = rot
+	newimage.Size = size
+	newimage.Visible = visible
+	newimage.ZIndex = zindex
+	newimage.Image = "rbxassetid://"..image
+	newimage.ImageTransparency = imagetrans
+	return newimage
+end
+local IntroFrames = createframe(Color3.new(43/255, 43/255, 43/255),0,Color3.new(27/255,42/255,53/255),0,"IntroFrames",Gui2,UDim2.new(0,-330,0,0),0,UDim2.new(0,300,1,0),true,1)
+ createframe(Color3.new(43/255, 43/255, 43/255),0,Color3.new(0,0,0),0,"bar",IntroFrames,UDim2.new(1,0,0,0),0,UDim2.new(0,30,0,90),true,1)
+ createimagelabel(Color3.new(1,1,1),1,Color3.new(0,0,0),0,"Slant",IntroFrames,UDim2.new(1,0,0,90),90,UDim2.new(0,30,0,30),true,1,474172996,0)
+ createlabel(Color3.new(1,1,1),1,Color3.new(0,0,0),0,"Creator",IntroFrames,UDim2.new(0,80,1,-40),0,UDim2.new(0,140,0,30),true,1,Enum.Font.Code,Enum.FontSize.Size14,"MR STEAL YO BORK @ BORK GANG",Color3.new(0/255, 174/255, 255/255), false,Color3.new(0,0,0),1,0,true,Enum.TextXAlignment.Center,Enum.TextYAlignment.Center)
+ createlabel(Color3.new(1,1,1),1,Color3.new(0,0,0),0,"CreatorLabel",IntroFrames,UDim2.new(0,80,1,-70),0,UDim2.new(0,140,0,30),true,1,Enum.Font.Code,Enum.FontSize.Size18,"LEAKED BY:",Color3.new(0/255, 174/255, 255/255), false,Color3.new(0,0,0),1,0,true,Enum.TextXAlignment.Center,Enum.TextYAlignment.Center)
+ createlabel(Color3.new(1,1,1),1,Color3.new(0,0,0),0,"Desc",IntroFrames,UDim2.new(0,0,0,120),0,UDim2.new(1,0,0,90),true,1,Enum.Font.SourceSansLight,Enum.FontSize.Size14,"fuck the streets",Color3.new(0, 216, 18), true,Color3.new(0,0,0),1,0,true,Enum.TextXAlignment.Center,Enum.TextYAlignment.Center)
+createlabel(Color3.new(1,1,1),1,Color3.new(0,0,0),0,"SubTitle",IntroFrames,UDim2.new(0.5,-150,0,70),0,UDim2.new(0,300,0,40),true,1,Enum.Font.SourceSansBold,Enum.FontSize.Size32,"",Color3.new(27/255,42/255,53/255), false,Color3.new(0,0,0),1,0,true,Enum.TextXAlignment.Center,Enum.TextYAlignment.Center)
+ createlabel(Color3.new(1,1,1),1,Color3.new(0,0,0),0,"Title",IntroFrames,UDim2.new(0.5,-105,0,20),0,UDim2.new(0,210,0,60),true,1,Enum.Font.SourceSansBold,Enum.FontSize.Size32,"THE STREETS SCRIPT LEAK",Color3.new(0/255, 174/255, 255/255), false,Color3.new(0,0,0),1,0,true,Enum.TextXAlignment.Center,Enum.TextYAlignment.Center)
+
+IntroFrames:TweenPosition(UDim2.new(0,0,0,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quart,0.5,true)
+wait(3)
+IntroFrames:TweenPosition(UDim2.new(0,-330,0,0),Enum.EasingDirection.In,Enum.EasingStyle.Quart,0.5,true)
+wait(3)
+Gui2:Destroy()
+
+repeat wait() until
+game.Players.LocalPlayer ~= nil
+
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+local context = game:GetService("ContextActionService")
+local teleported = false
+local cartp = false
+local door = false
+local sound = false
+local decal = false
+local spray = false
+
+player.CharacterAdded:connect(function()
+Speed()
+end)
+
+function Gui()
+if game.CoreGui:FindFirstChild("Music") == nil then
+local s = Instance.new("ScreenGui", game.CoreGui)
+s.Name = "Music"
+local b = Instance.new("TextBox", s)
+b.Size = UDim2.new(0.07, 0, 0.03, 0)
+b.Position = UDim2.new(0.905, 0, 0.96, 0)
+b.BackgroundColor3 = Color3.new(0, 0, 0)
+b.BackgroundTransparency = 0.5
+b.Text = "Enter ID Here"
+b.TextColor3 = Color3.new(1, 1, 1)
+b.Font = "Code"
+b.FontSize = "Size14"
+b.BorderSizePixel = 0
+local t = Instance.new("TextButton", s)
+t.Size = UDim2.new(0.02, 0, 0.03, 0)
+t.Position = UDim2.new(0.975, 0, 0.96, 0)
+t.BackgroundColor3 = Color3.new(0, 0, 0)
+t.BackgroundTransparency = 0.5
+t.Text = "Play"
+t.TextColor3 = Color3.new(1, 1, 1)
+t.Font = "Code"
+t.FontSize = "Size14"
+t.BorderSizePixel = 0
+t.MouseButton1Click:connect(function()
+if player.Character:FindFirstChild("BoomBox") ~= nil then
+player.Character.BoomBox.Remote:FireServer("PlaySong", b.Text)
+else
+b.Text = "Equip Radio"
+end
+end)
+local b1LOLEMOJI = Instance.new("TextLabel", s)
+b1LOLEMOJI.Size = UDim2.new(0.07, 0, 0.03, 0)
+b1LOLEMOJI.Position = UDim2.new(0.105, 0, 0.8975, 0)
+b1LOLEMOJI.BackgroundColor3 = Color3.new(0, 0, 0)
+b1LOLEMOJI.BackgroundTransparency = 1
+b1LOLEMOJI.Text = "rekt by mr steal yo bork @ bork gang"
+b1LOLEMOJI.TextColor3 = Color3.new(255, 159, 5)
+b1LOLEMOJI.Font = "Code"
+b1LOLEMOJI.FontSize = "Size18"
+b1LOLEMOJI.BorderSizePixel = 0
+b2 = Instance.new("TextBox", s)
+b2.Size = UDim2.new(0.07, 0, 0.03, 0)
+b2.Position = UDim2.new(0.905, 0, 0.925, 0)
+b2.BackgroundColor3 = Color3.new(0, 0, 0)
+b2.BackgroundTransparency = 0.5
+b2.Text = "Enter ID Here"
+b2.TextColor3 = Color3.new(1, 1, 1)
+b2.Font = "Code"
+b2.FontSize = "Size14"
+b2.BorderSizePixel = 0
+local b3 = Instance.new("Frame", s)
+b3.Size = b2.Size
+b3.Position = b2.Position
+b3.BackgroundTransparency = 1
+local preview = Instance.new("ImageLabel", s)
+preview.Size = UDim2.new(0.06, 0, 0.11, 0)
+preview.Position = UDim2.new(0.47, 0, 0.45, 0)
+preview.BackgroundTransparency = 0.5
+preview.BackgroundColor3 = Color3.new(0, 0, 0)
+preview.BorderSizePixel = 0
+preview.Visible = false
+b2.Changed:connect(function()
+if b2.Text ~= nil and b2.Text:match("%d+") then
+preview.Image = "http://www.roblox.com/asset/?id="..b2.Text:match("%d+") - 1
+else
+preview.Image = nil
+end
+end)
+b2.MouseEnter:connect(function()
+preview.Visible = true
+end)
+b2.MouseMoved:connect(function()
+preview.Position = UDim2.new(0, mouse.X - 120, 0, mouse.Y - 115)
+end)
+b2.MouseLeave:connect(function()
+preview.Visible = false
+end)
+b3.MouseLeave:connect(function()
+preview.Visible = false
+end)
+t2 = Instance.new("TextBox", s)
+t2.Size = UDim2.new(0.02, 0, 0.03, 0)
+t2.Position = UDim2.new(0.975, 0, 0.925, 0)
+t2.BackgroundColor3 = Color3.new(0, 0, 0)
+t2.BackgroundTransparency = 0.5
+t2.Text = "Size"
+t2.TextColor3 = Color3.new(1, 1, 1)
+t2.Font = "Code"
+t2.FontSize = "Size14"
+t2.BorderSizePixel = 0
+local d = Instance.new("TextButton", s)
+d.Size = UDim2.new(0.0425, 0, 0.02, 0)
+d.Position = UDim2.new(0.905, 0, 0.8975, 0)
+d.Text = "Steal Decal"
+d.Font = "Code"
+d.FontSize = "Size14"
+d.BackgroundColor3 = Color3.new(0, 0, 0)
+d.TextColor3 = Color3.new(1, 1, 1)
+d.BackgroundTransparency = 0.5
+d.BorderColor3 = Color3.new(0.7, 0, 0)
+d.MouseButton1Click:connect(function()
+if door == false and sound == false and decal == false then
+decal = true
+context:BindAction("Decal", Decal, false, Enum.UserInputType.MouseButton1)
+d.BorderColor3 = Color3.new(0, 0.7, 0)
+else
+decal = false
+context:UnbindAction("Decal")
+d.BorderColor3 = Color3.new(0.7, 0, 0)
+end
+end)
+local so = Instance.new("TextButton", s)
+so.Size = UDim2.new(0.0425, 0, 0.02, 0)
+so.Position = UDim2.new(0.952, 0, 0.8975, 0)
+so.Text = "Steal Sound"
+so.Font = "Code"
+so.FontSize = "Size14"
+so.BackgroundColor3 = Color3.new(0, 0, 0)
+so.TextColor3 = Color3.new(1, 1, 1)
+so.BackgroundTransparency = 0.5
+so.BorderColor3 = Color3.new(0.7, 0, 0)
+so.MouseButton1Click:connect(function()
+if door == false and sound == false and decal == false then
+sound = true
+context:BindAction("Sound", Sound, false, Enum.UserInputType.MouseButton1)
+so.BorderColor3 = Color3.new(0, 0.7, 0)
+else
+sound = false
+context:UnbindAction("Sound")
+so.BorderColor3 = Color3.new(0.7, 0, 0)
+end
+end)
+local d2 = Instance.new("TextButton", s)
+d2.Size = UDim2.new(0.0425, 0, 0.02, 0)
+d2.Position = UDim2.new(0.952, 0, 0.87, 0)
+d2.Text = "Open Door"
+d2.Font = "Code"
+d2.FontSize = "Size14"
+d2.BackgroundColor3 = Color3.new(0, 0, 0)
+d2.TextColor3 = Color3.new(1, 1, 1)
+d2.BackgroundTransparency = 0.5
+d2.BorderColor3 = Color3.new(0.7, 0, 0)
+d2.MouseButton1Click:connect(function()
+if door == false and sound == false and decal == false then
+door = true
+context:BindAction("Open", Open, false, Enum.UserInputType.MouseButton1)
+d2.BorderColor3 = Color3.new(0, 0.7, 0)
+else
+door = false
+context:UnbindAction("Open")
+d2.BorderColor3 = Color3.new(0.7, 0, 0)
+end
+end)
+end
+end
+
+function Speed()
+
+player.Backpack:WaitForChild("Punch").Info.Cooldown.Value = 0.01
+player.Backpack.Punch.Info.AnimSpeed.Value = 5
+player.Backpack:WaitForChild("Knife").Info.Cooldown.Value = 0.01
+player.Backpack.Knife.Info.AnimSpeed.Value = 5
+if game:GetService("MarketplaceService"):PlayerOwnsAsset(player, 503266657) then
+player.Backpack:WaitForChild("Pipe").Info.Cooldown.Value = 0.01
+player.Backpack.Pipe.Info.AnimSpeed.Value = 5
+end
+player.Backpack.ChildAdded:connect(function(child)
+if child.Name == "Bat" or child.Name == "Bottle" or child.Name == "Machete" or child.Name == "Stop Sign" or child.Name == "Golf Club" then
+child:WaitForChild("Info").Cooldown.Value = 0.01
+child.Info.AnimSpeed.Value = 5
+end
+end)
+
+if game:GetService("MarketplaceService"):PlayerOwnsAsset(player, 529140430) then
+player.Backpack:FindFirstChild("Spray").Equipped:connect(function()
+context:BindAction("Spray", Spray, false, Enum.UserInputType.MouseButton1)
+end)
+player.Backpack:FindFirstChild("Spray").Unequipped:connect(function()
+context:UnbindAction("Spray")
+end)
+end
+player.Backpack.ServerTraits.Stam.Changed:connect(function()
+player.Backpack.ServerTraits.Stam.Value = 100
+end)
+--if game:GetService("MarketplaceService"):PlayerOwnsAsset(player, 469767880) then
+Gui()
+player.PlayerGui.ChildAdded:connect(function(child)
+if child.Name == "ChooseSongGui" or child.Name == "SprayGui" then
+child:Destroy()
+end
+end)
+--end
+player.Character.Humanoid.Seated:connect(function(sitting, seat)
+if sitting and seat.Name == "Drive" then
+player.PlayerGui.LocalScript.Disabled = true
+elseif sitting == false and player.PlayerGui.LocalScript.Disabled == true then
+player.PlayerGui.LocalScript.Disabled = false
+end
+end)
+end
+
+function Items(actionName, inputState, inputObject)
+for Num, Obj in pairs(game.Workspace:GetChildren()) do
+if Obj.Name == "RandomSpawner" then
+Obj.CanCollide = false
+wait()
+Obj.CFrame = player.Character.Torso.CFrame
+end
+end
+end
+
+function Friends(actionName, inputState, inputObject)
+for Num, Obj in pairs(game.Players:GetPlayers()) do
+if Obj:IsFriendsWith(player.UserId) and not teleported and Obj ~= player then
+player.Character:MoveTo(Obj.Character.Torso.Position)
+teleported = true
+end
+teleported = false
+end
+end
+
+function Car(actionName, inputState, inputObject)
+for Num, Obj in pairs(game.Workspace:GetChildren()) do
+if Obj.Name == "Car" and Obj:FindFirstChild("Drive").Occupant == nil and cartp == false then
+cartp = true
+Obj:MoveTo(player.Character.Torso.Position + player.Character.Torso.CFrame.lookVector * 15)
+Obj:MakeJoints()
+end
+end
+cartp = false
+end
+
+function Door(actionName, inputState, inputObject)
+if inputState == Enum.UserInputState.Begin then
+context:BindAction("Lock", Lock, false, Enum.UserInputType.MouseButton1)
+else
+context:UnbindAction("Lock")
+end
+end
+
+function Lock(actionName, inputState, inputObject)
+if inputState == Enum.UserInputState.End then
+if mouse.Target.Parent.Name == "Door" and mouse.Target.Name ~= "Lock" and mouse.Target.Name ~= "Click" then
+local door = mouse.Target.Parent
+door:FindFirstChild("Lock").ClickDetector.RemoteEvent:FireServer()
+elseif mouse.Target.Parent.Parent.Name == "Door" then
+local door = mouse.Target.Parent.Parent
+door:FindFirstChild("Lock").ClickDetector.RemoteEvent:FireServer()
+end
+end
+end
+
+function Open(actionName, inputState, inputObject)
+if inputState == Enum.UserInputState.End then
+if mouse.Target.Parent.Name == "Door" and mouse.Target.Name ~= "Lock" and mouse.Target.Name ~= "Click" then
+local door = mouse.Target.Parent
+door:FindFirstChild("Click").ClickDetector.RemoteEvent:FireServer()
+elseif mouse.Target.Parent.Parent.Name == "Door" then
+local door = mouse.Target.Parent.Parent
+door:FindFirstChild("Click").ClickDetector.RemoteEvent:FireServer()
+end
+end
+end
+
+function Steal(actionName, inputState, inputObject)
+if inputState == Enum.UserInputState.Begin then
+context:BindAction("Sound", Sound, false, Enum.UserInputType.MouseButton1)
+context:BindAction("Decal", Decal, false, Enum.UserInputType.MouseButton2)
+else
+context:UnbindAction("Sound")
+context:UnbindAction("Decal")
+end
+end
+
+function Sound(actionName, inputState, inputObject)
+if inputState == Enum.UserInputState.End then
+if mouse.Target.Parent:FindFirstChild("BoomBox") and mouse.Target.Parent.BoomBox.Handle.Sound.SoundId ~= nil then
+local sound = mouse.Target.Parent.BoomBox
+print("Sound: "..sound.Handle.Sound.SoundId:match("%d+"))
+elseif mouse.Target.Parent.Parent:FindFirstChild("BoomBox") and mouse.Target.Parent.Parent.BoomBox.Handle.Sound.SoundId ~= nil then
+local sound = mouse.Target.Parent.Parent.BoomBox
+print("Sound: "..sound.Handle.Sound.SoundId:match("%d+"))
+end
+end
+end
+
+function Decal(actionName, inputState, inputObject)
+if inputState == Enum.UserInputState.End then
+if mouse.Target.Name:find("Spray") and mouse.Target:FindFirstChild("Decal") ~= nil then
+print("Decal: "..mouse.Target.Decal.Texture:match("%d+"))
+end
+end
+end
+
+function Spray(actionName, inputState, inputObject)
+if inputState == Enum.UserInputState.End then
+if mouse.Target ~= nil and player.Character:FindFirstChild("Spray") ~= nil then
+player.Character.Spray.SprayIt:FireServer("http://www.roblox.com/asset/?id=", b2.Text, mouse.TargetSurface, t2.Text, mouse.Target, mouse.Hit)
+end
+end
+end
+
+for Num, Obj in pairs(game.Workspace:GetChildren()) do
+if Obj.Name == "Car" and Obj:FindFirstChild("Drive") ~= nil then
+Obj.Drive.MaxSpeed = 500
+Obj.Drive.Torque = 60
+end
+end
+
+context:BindAction("Items", Items, false, Enum.KeyCode.P)
+context:BindAction("Car", Car, false, Enum.KeyCode.K)
+context:BindAction("Door", Door, false, Enum.KeyCode.LeftControl)
+
+Speed()
+Gui()
+game.Players.LocalPlayer.CameraMaxZoomDistance = 400
